@@ -375,6 +375,18 @@ tasks:
             manifest["contract"]["operations"]["maintain"]["mutability"],
             "repository_write",
         )
+        self.assertIn(
+            "low-risk exact-record",
+            manifest["contract"]["operations"]["inspect"]["description"],
+        )
+        self.assertIn(
+            "optional",
+            manifest["contract"]["operations"]["plan"]["description"],
+        )
+        self.assertIn(
+            "not required for the fast path",
+            manifest["contract"]["operations"]["maintain"]["description"],
+        )
         self.assertEqual(
             manifest["contract"]["operations"]["verify"]["mutability"],
             "read_only",

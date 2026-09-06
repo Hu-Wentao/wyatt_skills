@@ -21,10 +21,12 @@ mdq:
 # Document Audit Policy
 
 This policy is the compatibility surface for configured `document-audit`
-tasks. Prefer [document-maintenance.md](document-maintenance.md) and its
-`inspect`, `plan`, `maintain`, and `verify` operations for new workflows.
-`docs audit` remains a read-only compatibility operation with its existing
-output schema; `docs verify` adds lifecycle-field maintenance checks.
+tasks. Prefer [document-maintenance.md](document-maintenance.md): use the
+queryable-markdown fast path for one low-risk exact-record edit and its
+`inspect`, `plan`, `maintain`, and `verify` operations for semantic or
+cross-document maintenance. `docs audit` remains a read-only compatibility
+operation with its existing output schema; `docs verify` adds lifecycle-field
+maintenance checks.
 
 Use deterministic discovery and validation for Markdown contracts, local links,
 stable requirement and defect identifiers, lifecycle indexes, and verification

@@ -111,6 +111,7 @@ class DocumentMaintenanceTest(unittest.TestCase):
         self.assertEqual(report["state"], "inspection_completed")
         self.assertEqual(report["counts"]["inventory_files"], 2)
         self.assertEqual(report["counts"]["governed_files"], 1)
+        self.assertIn("fast path", report["next_action"])
         self.assertFalse(
             any(issue["file"] == "README.md" for issue in report["issues"])
         )
@@ -139,6 +140,14 @@ class DocumentMaintenanceTest(unittest.TestCase):
         )
         self.assertTrue(report["batches"])
         self.assertTrue(report["source_snapshot"])
+        self.assertIn("fast path", report["next_action"])
+
+    def test_maintain_is_a_full_path_preflight(self) -> None:
+        result = self.run_script("maintain")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        report = json.loads(result.stdout)
+        self.assertIn("fast path", report["next_action"])
+        self.assertIn("queryable-markdown", report["next_action"])
 
     def test_readme_is_not_a_governed_document(self) -> None:
         plans = self.docs / "plans"
