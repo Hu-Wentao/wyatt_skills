@@ -51,8 +51,8 @@ queries:
       operator: eq
     select: [status, scope, fit, disposition, evaluated, shared_assessment, shared_revision, upstream_ref]
     expect:
-      max_record_lines: 120
-      max_record_bytes: 20000
+      max_record_lines: 240
+      max_record_bytes: 50000
       structured: true
       min_confidence: 1.0
 maintenance:
