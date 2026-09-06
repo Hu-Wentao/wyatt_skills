@@ -98,7 +98,9 @@ tasks:
 ```
 
 When `document-maintenance` is not configured, the skill supplies a managed
-project-neutral contract with `inspect`, `plan`, `maintain`, and `verify`.
+project-neutral contract with `inspect`, `plan`, `maintain`, and `verify` for
+full-path maintenance. A single low-risk exact-record edit may use the
+queryable-markdown fast path without invoking these project-wide operations.
 Project configuration is required only when the repository needs different
 governed roots, status vocabularies, or deterministic document commands. The
 legacy `document-audit` task may remain configured during migration.

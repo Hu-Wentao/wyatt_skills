@@ -21,7 +21,9 @@ mdq:
 # Document Maintenance
 
 Maintain the complete project documentation surface without confusing
-inventory, structural repair, and semantic lifecycle decisions.
+inventory, structural repair, and semantic lifecycle decisions. Use a
+risk-based path: keep exact low-risk edits small, and reserve project-wide
+maintenance gates for changes that can alter authority or lifecycle meaning.
 
 ## Separate Inventory from Governance
 
@@ -57,18 +59,46 @@ ordinary Markdown beside source code. Embedded contracts participate in the
 same persistent-mdq, source-snapshot, plan, and verify gates as docs-owned
 records.
 
-## Use the Maintenance Operations
+## Choose the Smallest Path
 
-- Use `inspect` to collect the current inventory, deterministic structural
-  diagnostics, and queryable lifecycle records without changing files.
-- Use `plan` to group affected documents, distinguish mechanical repairs from
-  semantic reviews, and record the source snapshot that the plan describes.
-- Use `maintain` only with current explicit write authorization. Treat its
-  output as the bounded preflight for the selected scope, then perform the
-  approved document edits through `queryable-markdown` transactions.
-- Use `verify` after edits. Do not claim completion while structural errors,
-  unreviewed semantic decisions, invalid contracts, or ambiguous identities
-  remain in the authorized scope.
+Do not require every document change to run every maintenance operation.
+Classify the requested mutation by its observable risk, not only by the number
+of files involved.
+
+### Fast path: one low-risk exact-record edit
+
+Use the queryable-markdown fast path when all of the following are true:
+
+- the target document has a valid persistent contract;
+- one exact, case-sensitive record is already known;
+- the edit does not change identity, boundaries, contract metadata, lifecycle
+  status, links, indexes, or another document;
+- the replacement value is supplied by the request and does not need semantic
+  invention.
+
+Use `get` or `set` to retrieve and preflight the target, apply the smallest
+source patch or scalar transaction, and run the smallest sufficient `mdq check`
+tier. A project-wide `inspect`, `plan`, or `maintain` operation is not required
+for this path.
+
+### Full path: semantic or cross-document maintenance
+
+Use the full path for new documents, contract or identity changes, lifecycle
+status, requirements, baselines, plans, archives, indexes, links, or any
+cross-document change:
+
+1. Run `inspect` when the scope, authority, or current source is not already
+   known.
+2. Run `plan` when semantic decisions, multiple plausible repairs, or
+   cross-document effects need to be recorded.
+3. Use `maintain` with current explicit write authorization as the bounded
+   preflight for the selected scope. It does not itself replace the
+   queryable-markdown edit.
+4. Apply the approved edits through `queryable-markdown` transactions.
+5. Run `verify` for the authorized scope.
+
+`maintain` is therefore a full-path authorization and source-snapshot gate,
+not a mandatory ceremony for every single-record edit.
 
 Keep operation mutability in the task contract. Do not use a runtime parameter
 to turn one read-only operation into a write operation.
@@ -105,14 +135,19 @@ inspected source. Partition concurrent work only across disjoint files. Apply
 shared requirement indexes, baseline indexes, plan indexes, and cross-document
 reference repairs serially after the disjoint edits converge.
 
-For each governed document edit:
+For every governed document edit:
 
 1. resolve the exact record identity and source range;
 2. preserve authored bytes outside the authorized record or contract control
    region;
-3. apply the smallest profile reference, contract, field, status, link, or lifecycle change;
-4. run `mdq validate`, `diagnose`, representative exact and negative queries;
-5. rerun collection scanning and the maintenance `verify` operation.
+3. apply the smallest profile reference, contract, field, status, link, or
+   lifecycle change;
+4. choose the smallest sufficient verification evidence:
+   - `mdq check --tier content` for an existing prose or field value;
+   - `mdq check --tier structure` for identity, heading, marker, label, ordering,
+     or boundary changes;
+   - `mdq check --tier contract` for contract, query, or index-policy changes;
+   - collection `verify` after full-path or cross-document maintenance.
 
 Stop with `decision_required` when evidence is insufficient or multiple
 semantic repairs remain plausible. A maintenance request authorizes only its
@@ -123,6 +158,8 @@ deployment, publication, or external writes.
 
 Treat `docs audit` as a backward-compatible read-only audit operation with its
 legacy output schema. Use `docs verify` for expanded lifecycle verification.
-Prefer the `document-maintenance` task and its explicit operations for new
-automation. Keep the legacy `document-audit` task resolvable while configured
-projects migrate their contracts.
+Prefer the queryable-markdown fast path for one low-risk exact-record edit and
+the `document-maintenance` task for the full path. Keep the legacy
+`document-audit` task resolvable while configured projects migrate their
+contracts. Existing `maintain` operations remain compatible, but are not
+required when the fast-path conditions hold.

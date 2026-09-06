@@ -402,12 +402,12 @@ def build_report(args: argparse.Namespace) -> tuple[dict[str, Any], int]:
         report["batches"] = batches(selected)
         report["source_snapshot"] = snapshot_entries
         report["next_action"] = (
-            "apply authorized scoped edits with queryable-markdown, then verify"
+            "apply authorized scoped edits with queryable-markdown, then verify; use the fast path instead for one low-risk exact-record edit"
             if args.operation == "maintain"
-            else "review semantic decisions and authorize the selected maintenance scope"
+            else "review semantic decisions and authorize the selected full-path scope; use the fast path instead for one low-risk exact-record edit"
         )
     elif args.operation == "inspect":
-        report["next_action"] = "create a maintenance plan or report no drift"
+        report["next_action"] = "use the queryable-markdown fast path for one low-risk exact-record edit, or create a maintenance plan for semantic or cross-document work"
     else:
         report["next_action"] = (
             "complete"
