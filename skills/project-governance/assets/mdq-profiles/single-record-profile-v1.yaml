@@ -1,0 +1,35 @@
+x-profile-id: project-governance/single-record-profile-v1
+x-profile-version: 1
+version: 1
+dialect: gfm
+records:
+  boundary:
+    source: heading
+    levels: [1]
+    level_tolerance: 0
+  key:
+    source: marker
+fields:
+  title:
+    source: heading
+  status:
+    source: label
+    labels: [Status, 状态]
+  review_level:
+    source: label
+    labels: [Review level, 审查级别]
+  requirement:
+    source: label
+    labels: [Requirement, Requirement ID, 要求]
+  compliance:
+    source: label
+    labels: [Compliance, 合规]
+  decision_level:
+    source: label
+    labels: [Decision level, 决策等级]
+  raw:
+    source: body
+  body:
+    source: body
+tolerance:
+  incomplete: true

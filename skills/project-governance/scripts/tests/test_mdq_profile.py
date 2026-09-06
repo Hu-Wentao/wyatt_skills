@@ -46,6 +46,7 @@ class SharedMdqProfileTest(unittest.TestCase):
             "marketing-profile-v2": 2,
             "evaluation-profile-v1": 1,
             "evaluation-profile-v2": 2,
+            "single-record-profile-v1": 1,
         }
         for name, family_version in expected.items():
             path = PROFILE_ROOT / f"{name}.yaml"

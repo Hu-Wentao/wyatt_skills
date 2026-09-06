@@ -24,6 +24,7 @@ profile reference, not a second inline extraction contract.
 | Marketing leads | `project-governance/marketing-profile-v2` | `MKT-LEAD-####` level-2 records; lead identity and facet queries |
 | Technical evaluations | `project-governance/evaluation-profile-v1` | `TECH-EVAL-*` level-1 records |
 | Technical fit evaluations | `project-governance/evaluation-profile-v2` | `TECH-FIT-*` level-1 records; `fit_by_id` |
+| Single-record plans/baselines/archive | `project-governance/single-record-profile-v1` | One marker-backed level-1 record with common status/review metadata |
 
 The family version in the reference is independent of the mdq protocol version
 inside the asset. For example, `defect-profile-v1` is a first published family
