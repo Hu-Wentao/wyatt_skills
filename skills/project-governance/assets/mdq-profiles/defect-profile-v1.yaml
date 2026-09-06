@@ -36,10 +36,5 @@ queries:
       max_record_bytes: 50000
       structured: true
       min_confidence: 1.0
-maintenance:
-  query_contract:
-    mode: propose
-    allow: [queries, fields, records]
-    max_changes_per_run: 1
 tolerance:
   incomplete: false

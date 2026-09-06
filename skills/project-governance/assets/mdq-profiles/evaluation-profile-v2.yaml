@@ -57,6 +57,6 @@ queries:
       min_confidence: 1.0
 maintenance:
   query_contract:
-    mode: propose
+    mode: locked
 tolerance:
   incomplete: false
