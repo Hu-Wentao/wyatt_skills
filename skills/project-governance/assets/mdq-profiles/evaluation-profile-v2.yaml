@@ -1,0 +1,62 @@
+x-profile-id: project-governance/evaluation-profile-v2
+x-profile-version: 2
+version: 2
+dialect: gfm
+actors:
+  read: mixed
+  write: mixed
+records:
+  boundary:
+    source: heading
+    levels: [1]
+    level_tolerance: 0
+    pattern: '^(?P<id>TECH-FIT-[A-Z0-9-]+)(?:[ ：—-]+.+)?$'
+  key:
+    source: heading
+    pattern: '^(?P<id>TECH-FIT-[A-Z0-9-]+)(?:[ ：—-]+.+)?$'
+    group: id
+fields:
+  status:
+    source: label
+    labels: [Status]
+  scope:
+    source: label
+    labels: [Scope]
+  fit:
+    source: label
+    labels: [Fit]
+  disposition:
+    source: label
+    labels: [Disposition]
+  evaluated:
+    source: label
+    labels: [Evaluated]
+  shared_assessment:
+    source: label
+    labels: [Shared Assessment]
+  shared_revision:
+    source: label
+    labels: [Shared Revision]
+  upstream_ref:
+    source: label
+    labels: [Upstream Ref]
+  raw:
+    source: body
+queries:
+  fit_by_id:
+    when:
+      pattern: '^TECH-FIT-[A-Z0-9-]+$'
+    match:
+      source: key
+      operator: eq
+    select: [status, scope, fit, disposition, evaluated, shared_assessment, shared_revision, upstream_ref]
+    expect:
+      max_record_lines: 120
+      max_record_bytes: 20000
+      structured: true
+      min_confidence: 1.0
+maintenance:
+  query_contract:
+    mode: propose
+tolerance:
+  incomplete: false

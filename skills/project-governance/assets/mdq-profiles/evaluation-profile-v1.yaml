@@ -1,0 +1,32 @@
+x-profile-id: project-governance/evaluation-profile-v1
+x-profile-version: 1
+version: 1
+dialect: gfm
+records:
+  boundary:
+    source: heading
+    levels: [1]
+    level_tolerance: 0
+    pattern: '^(?P<id>TECH-EVAL-[A-Z0-9-]+)\s+.+$'
+  key:
+    source: heading
+    pattern: '^(?P<id>TECH-EVAL-[A-Z0-9-]+)\s+.+$'
+    group: id
+fields:
+  status:
+    source: label
+    labels: [Status]
+  kind:
+    source: label
+    labels: [Kind]
+  scope:
+    source: label
+    labels: [Scope]
+  disposition:
+    source: label
+    labels: [Disposition]
+  evaluated:
+    source: label
+    labels: [Evaluated]
+tolerance:
+  incomplete: false

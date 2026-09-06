@@ -1,0 +1,119 @@
+x-profile-id: project-governance/marketing-profile-v2
+x-profile-version: 2
+version: 2
+dialect: gfm
+actors:
+  read: mixed
+  write: mixed
+records:
+  boundary:
+    source: heading
+    levels: [2]
+    level_tolerance: 0
+    pattern: '^MKT-LEAD-[0-9]{4}(?:[ ：:-]+.*)?$'
+  key:
+    source: heading
+    pattern: '^(?P<id>MKT-LEAD-[0-9]{4})(?:[ ：:-]+(?P<title>.*))?$'
+    group: id
+fields:
+  title:
+    source: heading
+    group: title
+  type:
+    source: label
+    labels: [类型]
+  status:
+    source: label
+    labels: [状态]
+  priority:
+    source: label
+    labels: [优先级]
+  owner:
+    source: label
+    labels: [负责人]
+  source:
+    source: label
+    labels: [来源]
+  public_url:
+    source: label
+    labels: [公开链接]
+  source_read_status:
+    source: label
+    labels: [来源读取]
+  resource_ref:
+    source: label
+    labels: [内容归档]
+  next_action:
+    source: label
+    labels: [下一步]
+  follow_up_on:
+    source: label
+    labels: [下次跟进]
+  updated_on:
+    source: label
+    labels: [更新时间]
+  external_ref:
+    source: label
+    labels: [外部引用]
+  raw:
+    source: body
+queries:
+  lead_by_id:
+    when:
+      pattern: '^MKT-LEAD-[0-9]{4}$'
+    match:
+      source: key
+      operator: eq
+    select: [title, type, status, priority, owner, source_read_status, resource_ref, next_action, follow_up_on, updated_on]
+    expect:
+      max_record_lines: 80
+      max_record_bytes: 16384
+      structured: true
+      min_confidence: 1.0
+  leads_by_type:
+    when:
+      pattern: '^(channel|prospect)$'
+    match:
+      source: field
+      field: type
+      operator: eq
+    select: [title, status, priority, owner, next_action, follow_up_on, updated_on]
+    expect:
+      max_record_lines: 80
+      max_record_bytes: 16384
+      max_total_bytes: 131072
+      structured: true
+      min_confidence: 1.0
+  leads_by_status:
+    when:
+      pattern: '^(inbox|qualified|active|waiting|converted|closed|archived)$'
+    match:
+      source: field
+      field: status
+      operator: eq
+    select: [title, type, priority, owner, source_read_status, next_action, follow_up_on, updated_on]
+    expect:
+      max_record_lines: 80
+      max_record_bytes: 16384
+      max_total_bytes: 131072
+      structured: true
+      min_confidence: 1.0
+  leads_by_source_read_status:
+    when:
+      pattern: '^(verified|partial|blocked|not_required)$'
+    match:
+      source: field
+      field: source_read_status
+      operator: eq
+    select: [title, type, status, priority, owner, public_url, next_action, updated_on]
+    expect:
+      max_record_lines: 80
+      max_record_bytes: 16384
+      max_total_bytes: 131072
+      structured: true
+      min_confidence: 1.0
+maintenance:
+  query_contract:
+    mode: propose
+tolerance:
+  incomplete: false

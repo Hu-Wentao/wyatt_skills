@@ -1,0 +1,74 @@
+x-profile-id: project-governance/domain-profile-v2
+x-profile-version: 2
+version: 2
+dialect: gfm
+actors:
+  read: mixed
+  write: mixed
+records:
+  boundary:
+    source: heading
+    levels: [2]
+  key:
+    source: heading
+    pattern: '^(?P<id>DD-[A-Z0-9]+-[0-9]{3})(?:[ ：:-]+(?P<title>.*))?$'
+    group: id
+fields:
+  title:
+    source: heading
+    group: title
+  status:
+    source: label
+    labels: [Status, 状态]
+  context:
+    source: label
+    labels: [Bounded Context, 界定上下文]
+  persistence:
+    source: label
+    labels: [Persistence, 持久化]
+  existing:
+    source: label
+    labels: [Existing PG classification]
+  boundary:
+    source: label
+    labels: [Boundary]
+  unresolved:
+    source: label
+    labels: [Unresolved, 未决]
+  raw:
+    source: body
+queries:
+  definition_by_id:
+    when:
+      pattern: '^DD-[A-Z0-9]+-[0-9]{3}$'
+    match:
+      source: key
+      operator: eq
+    select: [title, status, context, persistence, existing, boundary, unresolved]
+    expect:
+      max_record_lines: 220
+      max_record_bytes: 50000
+      structured: true
+      min_confidence: 1.0
+  definitions_by_status:
+    match:
+      source: field
+      field: status
+      operator: eq
+    select: [title, context, persistence, existing, boundary, unresolved]
+    expect:
+      max_total_bytes: 200000
+      structured: true
+      min_confidence: 1.0
+  definitions_by_context:
+    match:
+      source: field
+      field: context
+      operator: eq
+    select: [title, status, persistence, existing, boundary, unresolved]
+    expect:
+      max_total_bytes: 200000
+      structured: true
+      min_confidence: 1.0
+tolerance:
+  incomplete: false

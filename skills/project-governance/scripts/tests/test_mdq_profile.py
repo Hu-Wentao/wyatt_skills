@@ -11,7 +11,8 @@ import yaml
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[2]
-PROFILE = SKILL_ROOT / "assets" / "mdq-profiles" / "governed-document-v1.yaml"
+PROFILE_ROOT = SKILL_ROOT / "assets" / "mdq-profiles"
+PROFILE = PROFILE_ROOT / "governed-document-v1.yaml"
 PROFILE_REFERENCE = "project-governance/governed-document-v1"
 
 
@@ -36,6 +37,40 @@ class SharedMdqProfileTest(unittest.TestCase):
             assert match is not None
             self.assertEqual(match.group("id"), identifier)
             self.assertEqual(match.group("title"), title)
+
+    def test_profile_catalog_is_self_identifying_and_versioned(self) -> None:
+        expected = {
+            "governed-document-v1": 1,
+            "defect-profile-v1": 1,
+            "domain-profile-v2": 2,
+            "marketing-profile-v2": 2,
+            "evaluation-profile-v1": 1,
+            "evaluation-profile-v2": 2,
+        }
+        for name, family_version in expected.items():
+            path = PROFILE_ROOT / f"{name}.yaml"
+            self.assertTrue(path.is_file(), name)
+            document = yaml.safe_load(path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                document["x-profile-id"], f"project-governance/{name}"
+            )
+            self.assertEqual(document["x-profile-version"], family_version)
+            self.assertIn(document["version"], (1, 2))
+            self.assertIn("records", document)
+            self.assertIn("fields", document)
+
+    def test_named_query_families_use_mdq_v2(self) -> None:
+        for name in (
+            "defect-profile-v1",
+            "domain-profile-v2",
+            "marketing-profile-v2",
+            "evaluation-profile-v2",
+        ):
+            document = yaml.safe_load(
+                (PROFILE_ROOT / f"{name}.yaml").read_text(encoding="utf-8")
+            )
+            self.assertEqual(document["version"], 2, name)
+            self.assertTrue(document.get("queries"), name)
 
 
 def document_pattern() -> str:

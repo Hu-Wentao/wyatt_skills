@@ -10,12 +10,24 @@ mdq:
   tolerance: {incomplete: true}
 ---
 <!-- mdq:record id="GOV-SHARED-MDQ-PROFILE" -->
-# Shared MDQ Profile
+# Shared MDQ Profiles
 
-Use the versioned shared profile for project-governed documents that represent
-records as level-2 headings with structured IDs such as `REQ-001`, `PLAN-001`,
-`Q-001`, or `DECISION-001`. The profile exposes the title, status, review
-level, source, and raw record body.
+Use the smallest versioned shared profile that matches the document family.
+Profiles are complete declarations: a consuming document supplies only the
+profile reference, not a second inline extraction contract.
+
+| Family | Reference | Shape and standard named queries |
+| --- | --- | --- |
+| Generic governed records | `project-governance/governed-document-v1` | Level-2 structured IDs and standard governance labels; no named query requirement |
+| Defects | `project-governance/defect-profile-v1` | `DEF-YYYYMMDD-slug` level-1 records; `defect_by_id` |
+| Domain definitions | `project-governance/domain-profile-v2` | `DD-*` level-2 records; `definition_by_id`, status, and context queries |
+| Marketing leads | `project-governance/marketing-profile-v2` | `MKT-LEAD-####` level-2 records; lead identity and facet queries |
+| Technical evaluations | `project-governance/evaluation-profile-v1` | `TECH-EVAL-*` level-1 records |
+| Technical fit evaluations | `project-governance/evaluation-profile-v2` | `TECH-FIT-*` level-1 records; `fit_by_id` |
+
+The family version in the reference is independent of the mdq protocol version
+inside the asset. For example, `defect-profile-v1` is a first published family
+contract and uses mdq v2 because it owns a reusable named query.
 
 ## Profile Identity
 
@@ -37,8 +49,9 @@ mdq:
 A reference is the complete `mdq` declaration. Do not combine it with inline
 `version`, `records`, `fields`, tolerance, query, maintenance, or index keys.
 Use a normal inline contract when the document has a different boundary, key
-scheme, field vocabulary, or query requirement. `README.md` remains ordinary
-and must not reference the profile.
+scheme, field vocabulary, or query requirement. Do not force an old archive or
+one-off record into a family merely to remove YAML. `README.md` remains
+ordinary and must not reference a profile.
 
 ## Resolution and Safety
 
@@ -60,6 +73,12 @@ record identity, boundaries, field extraction, tolerance, or compatibility
 semantics creates a new asset and reference such as `governed-document-v2`.
 Keep the old asset while documents still reference it. The filename suffix,
 `x-profile-id`, `x-profile-version`, and mdq `version` must agree.
+
+The same immutability rule applies to every family in the catalog. Add a new
+family version when its boundary, key pattern, field vocabulary, query names,
+query quality limits, or maintenance policy changes. A profile may use mdq v2
+while retaining a family version such as `v1`; the two version values have
+different meanings and must not be conflated.
 
 Changing a document from one profile version to another is a contract migration,
 not an incidental content edit. Inspect the document first, compare exact keys

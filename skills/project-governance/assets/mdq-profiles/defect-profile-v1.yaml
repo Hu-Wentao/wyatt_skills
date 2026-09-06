@@ -1,0 +1,45 @@
+x-profile-id: project-governance/defect-profile-v1
+x-profile-version: 1
+version: 2
+dialect: gfm
+actors:
+  read: mixed
+  write: machine
+records:
+  boundary:
+    source: heading
+    levels: [1]
+    level_tolerance: 0
+  key:
+    source: heading
+    pattern: '^(?P<id>DEF-[0-9]{8}-[a-z0-9-]+)(?:[ :：].*)?$'
+    group: id
+fields:
+  status:
+    source: regex
+    pattern: '^(?:>[ \t]*|[-*+][ \t]+)?(?:状态|Status)[：:][ \t]*(?P<status>[^\n]+)$'
+    group: status
+  title:
+    source: heading
+  raw:
+    source: body
+queries:
+  defect_by_id:
+    when:
+      pattern: '^DEF-[0-9]{8}-[a-z0-9-]+$'
+    match:
+      source: key
+      operator: eq
+    select: [status, title]
+    expect:
+      max_record_lines: 240
+      max_record_bytes: 50000
+      structured: true
+      min_confidence: 1.0
+maintenance:
+  query_contract:
+    mode: propose
+    allow: [queries, fields, records]
+    max_changes_per_run: 1
+tolerance:
+  incomplete: false
