@@ -16,6 +16,7 @@ Route project governance to the smallest applicable contract and reference. Keep
 3. Preserve terminology and append-only facts unless an authorized migration says otherwise.
 4. Treat release, deployment, rollback, live mutation, reward, and destructive actions as current-request authority only.
 5. Keep `README.md` user-facing; put architecture, lifecycle indexes, operations, contracts, and governed records in dedicated documents.
+6. For product and requirements governance, classify records as goals, story-map items, requirements, constraints, solutions, or verification. Keep the hierarchy and conflict procedure in [product-governance-model.md](references/product-governance-model.md).
 
 For `总结问题`, produce only intended outcome, symptoms, confirmed evidence, affected scope, impact, and unresolved questions. Preserve uncertainty and secrets; do not prescribe a fix or perform writes.
 
@@ -39,7 +40,7 @@ Use `--authorized` only when current user intent covers that non-read-only opera
 
 ## Route by Domain
 
-- Architecture, requirements, baselines, plans, scaffolding, lifecycle, or implementation handoff: [design-doc-rules.md](references/design-doc-rules.md), [requirements-governance.md](references/requirements-governance.md), [baseline-design.md](references/baseline-design.md), [project-scaffolding.md](references/project-scaffolding.md), [document-lifecycle.md](references/document-lifecycle.md), and [verification-traceability.md](references/verification-traceability.md).
+- Architecture, product goals, requirements, baselines, plans, scaffolding, lifecycle, or implementation handoff: first read [product-governance-model.md](references/product-governance-model.md), then use [design-doc-rules.md](references/design-doc-rules.md), [requirements-governance.md](references/requirements-governance.md), [baseline-design.md](references/baseline-design.md), [project-scaffolding.md](references/project-scaffolding.md), [document-lifecycle.md](references/document-lifecycle.md), and [verification-traceability.md](references/verification-traceability.md).
 - Legacy extraction: [legacy-extraction.md](references/legacy-extraction.md).
 - Dependency selection or replacement: [dependency-evaluation.md](references/dependency-evaluation.md).
 - Governed Markdown inventory, contracts, and lifecycle maintenance: use the queryable-markdown fast path for one low-risk exact-record edit; otherwise resolve `document-maintenance` and read [document-maintenance.md](references/document-maintenance.md). For reusable heading-record contracts, read [mdq-profile.md](references/mdq-profile.md); for local semantic candidate retrieval, invoke the `queryable-markdown` skill and read its `semantic-cli.md` reference.
